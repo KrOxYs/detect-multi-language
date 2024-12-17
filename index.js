@@ -1,0 +1,120 @@
+import { franc } from "franc"; // Language detection
+import langs from "langs"; // Map language codes to names
+
+// List of 100 languages (ISO 639-3 codes)
+const customLanguages = [
+  "eng",
+  "fra",
+  "spa",
+  "deu",
+  "ita",
+  "nld",
+  "por",
+  "rus",
+  "zho",
+  "jpn", // Top 10
+  "kor",
+  "hin",
+  "arb",
+  "tur",
+  "tha",
+  "pol",
+  "ukr",
+  "vie",
+  "swe",
+  "fin",
+  "dan",
+  "nor",
+  "ell",
+  "ron",
+  "ces",
+  "hun",
+  "bul",
+  "heb",
+  "ind",
+  "mal",
+  "tam",
+  "tel",
+  "mar",
+  "urd",
+  "aze",
+  "fil",
+  "sqi",
+  "slk",
+  "hrv",
+  "srp",
+  "lit",
+  "lat",
+  "lav",
+  "est",
+  "slv",
+  "cat",
+  "eus",
+  "glg",
+  "isl",
+  "msa",
+  "kan",
+  "pan",
+  "nep",
+  "sin",
+  "tha",
+  "kaz",
+  "uzb",
+  "kir",
+  "kur",
+  "amh",
+  "yor",
+  "ibo",
+  "hau",
+  "swa",
+  "zul",
+  "xho",
+  "afr",
+  "som",
+  "tgk",
+  "prs",
+  "pas",
+  "mlt",
+  "mon",
+  "tah",
+  "tgl",
+  "hat",
+  "bos",
+  "mlg",
+  "guj",
+  "ori",
+  "asm",
+  "ben",
+  "bod",
+  "mya",
+  "khm",
+  "lao",
+  "snd",
+  "kas",
+  "ory",
+  "sco",
+  "bre",
+  "wel",
+  "gle",
+  "mlt",
+  "fao",
+  "nds",
+  "war",
+  "nan",
+];
+console.log(`Number of languages: ${customLanguages.length}`);
+
+// Sample text for language detection
+const text =
+  "halo apa kabar? saya baik-baik saja kok. terima kasih sudah bertanya.";
+
+// Detect the language using the custom list
+const langCode3 = franc(text, { only: customLanguages });
+
+if (langCode3 === "und") {
+  console.log("Unable to detect language.");
+} else {
+  const language = langs.where("3", langCode3); // Map to human-readable language name
+  const iso639_1 = language ? language["1"] : "N/A"; // ISO 639-1 code
+  console.log(`Detected language: ${iso639_1} (${language.name})`);
+}
