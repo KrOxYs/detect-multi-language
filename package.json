@@ -11,9 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "compromise": "^14.14.3",
+    "express": "^4.21.2",
     "franc": "^6.2.0",
-    "langdetect": "^0.2.1",
     "langs": "^2.0.0"
   }
 }

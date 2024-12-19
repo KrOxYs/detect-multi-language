@@ -1,7 +1,11 @@
 import { franc } from "franc"; // Language detection
 import langs from "langs"; // Map language codes to names
+import express from "express";
 
-// List of 100 languages (ISO 639-3 codes)
+const app = express();
+
+app.use(express.json());
+
 const customLanguages = [
   "eng",
   "fra",
@@ -102,19 +106,46 @@ const customLanguages = [
   "war",
   "nan",
 ];
-console.log(`Number of languages: ${customLanguages.length}`);
 
-// Sample text for language detection
-const text =
-  "halo apa kabar? saya baik-baik saja kok. terima kasih sudah bertanya.";
+app.post("/detect-language", async (req, res) => {
+  try {
+    const { text } = req.body;
+    console.log("language supported languages:", customLanguages.length);
+    const langCode3 = franc(text, { only: customLanguages });
+    if (langCode3 === "und") {
+      return res.status(400).json({ error: "Unable to detect language." });
+    }
+    const language = langs.where("3", langCode3); // Map to human-readable language name
+    const iso639_1 = language ? language["1"] : "N/A"; // ISO 639-1 code
+    return res.json({
+      detectedLanguage: iso639_1,
+      languageName: language.name,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
 
-// Detect the language using the custom list
-const langCode3 = franc(text, { only: customLanguages });
+app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
 
-if (langCode3 === "und") {
-  console.log("Unable to detect language.");
-} else {
-  const language = langs.where("3", langCode3); // Map to human-readable language name
-  const iso639_1 = language ? language["1"] : "N/A"; // ISO 639-1 code
-  console.log(`Detected language: ${iso639_1} (${language.name})`);
-}
+// List of 100 languages (ISO 639-3 codes)
+
+// console.log(`Number of languages: ${customLanguages.length}`);
+
+// // Sample text for language detection
+// const text =
+//   "halo apa kabar? saya baik-baik saja kok. terima kasih sudah bertanya.";
+
+// // Detect the language using the custom list
+// const langCode3 = franc(text, { only: customLanguages });
+
+// if (langCode3 === "und") {
+//   console.log("Unable to detect language.");
+// } else {
+//   const language = langs.where("3", langCode3); // Map to human-readable language name
+//   const iso639_1 = language ? language["1"] : "N/A"; // ISO 639-1 code
+//   console.log(`Detected language: ${iso639_1} (${language.name})`);
+// }
